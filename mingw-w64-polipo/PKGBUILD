@@ -1,0 +1,25 @@
+# Contributor: Alexander Georgievskiy <galeksandrp@gmail.com>
+
+_realname=polipo
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=master
+pkgrel=1
+pkgdesc='The Polipo caching HTTP proxy (mingw-w64)'
+arch=('any')
+license=('MIT')
+url="https://github.com/jech/${_realname}"
+source=("${url}/archive/${pkgver}.tar.gz")
+sha256sums=('ddca70b33201b9b39301adcabab43b96c0f9ac05e6a7884fe3cd4be979f03c71')
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  make EXE=.exe LDLIBS=-lwsock32
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  make DESTDIR=${pkgdir} install
+}
