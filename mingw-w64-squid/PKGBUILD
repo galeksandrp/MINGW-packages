@@ -1,0 +1,28 @@
+# Contributor: Alexander Georgievskiy <galeksandrp@gmail.com>
+
+_realname=squid
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=3.5.24
+pkgrel=1
+pkgdesc='Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more (mingw-w64)'
+arch=('any')
+license=('GPL')
+makedepends=("${MINGW_PACKAGE_PREFIX}-openssl" "${MINGW_PACKAGE_PREFIX}-db")
+url="http://www.squid-cache.org"
+source=("https://ftp.mirrorservice.org/sites/ftp.squid-cache.org/pub/archive/$(echo ${pkgver} | cut -d '.' -f-2)/${_realname}-${pkgver}.tar.gz")
+sha256sums=('3eb2b1ce2ef0a0c15b149fb3f8d68538cce8e6cefe9ec3f7435ccf04fa9b9d14')
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  ./configure --prefix=${MINGW_PREFIX} CXXFLAGS="-DWINVER=0x601 -D_WIN32_WINNT=0x601" CFLAGS="-DWINVER=0x601 -D_WIN32_WINNT=0x601" --enable-build-info="Windows (MinGW-w64)" --enable-default-hostsfile=none
+  make
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  #sed 's&$(INSTALL_BIN) -s $(INSTALL_OBJS) $(BINDIR)&$(INSTALL_BIN) -s bin/* $(BINDIR)&' -i Makefile.Linux
+  #make DESTDIR=${pkgdir} prefix=${MINGW_PREFIX} install -f Makefile.Linux
+}
