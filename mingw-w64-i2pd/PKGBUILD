@@ -1,0 +1,31 @@
+# Contributor: Alexander Georgievskiy <galeksandrp@gmail.com>
+
+_realname=i2pd
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=2.12.0
+pkgrel=1
+pkgdesc='Full C++ implementation of I2P client (mingw-w64)'
+arch=('any')
+license=('BSD')
+makedepends=("${MINGW_PACKAGE_PREFIX}-boost" "${MINGW_PACKAGE_PREFIX}-openssl")
+url="https://github.com/PurpleI2P/${_realname}"
+source=("${url}/archive/${pkgver}.tar.gz")
+sha256sums=('afb763aea2a4f4b51e327352d5da82ec08e84735d28db9af7710563a117fc648')
+
+prepare() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  echo $ARCH
+}
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  make
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+
+  make install
+}
