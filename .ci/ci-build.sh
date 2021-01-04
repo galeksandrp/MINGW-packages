@@ -32,6 +32,15 @@ for package in "${packages[@]}"; do
     execute 'Building binary' makepkg-mingw --noconfirm --noprogressbar --nocheck --syncdeps --rmdeps --cleanbuild
     execute 'Building source' makepkg --noconfirm --noprogressbar --allsource --config '/etc/makepkg_mingw64.conf'
     execute 'Installing' yes:pacman --noprogressbar --upgrade '*.pkg.tar.*'
+
+    cd "$package"
+    for pkg in *.pkg.tar.*; do
+        message "File listing diff for ${pkg}"
+        pkgname="$(echo "$pkg" | rev | cut -d- -f4- | rev)"
+        diff -Nur <(pacman -Fl "$pkgname" | sed -e 's|^[^ ]* |/|' | sort) <(pacman -Ql "$pkgname" | sed -e 's|^[^/]*||' | sort)
+    done
+    cd -
+
     mv "${package}"/*.pkg.tar.* artifacts
     mv "${package}"/*.src.tar.gz artifacts
     unset package
