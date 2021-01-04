@@ -18,6 +18,8 @@ mkdir -p ~/.gnupg && echo -e "keyserver hkp://keys.gnupg.net\nkeyserver-options 
 # reduce time required to install packages by disabling pacman's disk space checking
 sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 
+pacman --noconfirm -Fy
+
 # Detect
 list_commits  || failure 'Could not detect added commits'
 list_packages || failure 'Could not detect changed files'
